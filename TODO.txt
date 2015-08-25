@@ -1,0 +1,2 @@
+#1 - Better error checking.
+#2 - Better way to check if we're dealing if a include guard.
