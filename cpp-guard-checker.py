@@ -80,7 +80,7 @@ class Constants:
 
     #App
     APP_NAME      = "cpp-guard-checker";
-    APP_VERSION   = "0.1";
+    APP_VERSION   = "0.1.1";
     APP_AUTHOR    = "N2OMatt <n2omatt@amazingcow.com>"
     APP_COPYRIGHT = "\n".join(("Copyright (c) 2015 - Amazing Cow",
                                "This is a free software (GPLv3) - Share/Hack it",
@@ -109,7 +109,8 @@ def print_help():
 
   -h --help           : Show this screen.
   -v --version        : Show app version and copyright.
-  --ext <ext>         : Add the file extension to search. (Must include the dot)
+  -i --interactive    : Runs in interactive mode (Asks before make a change).
+  --ext        <ext>  : Add the file extension to search. (Must include the dot)
   --backup-dir <path> : Where the original files will be backup.
 """
     print help;
