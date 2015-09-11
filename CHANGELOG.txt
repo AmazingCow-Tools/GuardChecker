@@ -1,0 +1,2 @@
+version 0.1.1
+[Sep 11 2015] - Fix the help output, this wasn't showing the interactive flag.
