@@ -39,7 +39,8 @@ or use the makefile
 ## Usage:
 
 ```
-cpp-guard-checker [-hv] [-i] [-n <project_name>] [--ext <ext>] [--backup-dir <path>] <project_root>
+cpp-guard-checker [-hv] [-i] [-n <project_name>] [--dry-run]
+                    [--ext <ext>] [--backup-dir <path>] <project_root>
 
 Options:
  *-h --help              : Show this screen.
@@ -48,6 +49,7 @@ Options:
   -n --project-name      : Set the Project Name (First part of include guard).
      --ext        <ext>  : Add the file extension to search. (Must include the dot)
      --backup-dir <path> : Where the original files will be backup-ed.
+     --dry-run           : No modifications will actually be made.
 ```
 
 ##### Notes:

@@ -4,3 +4,8 @@ version 0.1.1
 version 0.1.2
 [Sep 17 2015] - Add options to set the Project Name.
                 Rewrite the help message.
+
+version 0.1.3
+[Sep 17 2015] - Add the dry run option, so now the program will not touch
+                the sources but will perform all other operations.
+
