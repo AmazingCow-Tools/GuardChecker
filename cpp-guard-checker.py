@@ -59,6 +59,7 @@ class Globals:
     project_name = None;
 
     opt_interactive = False;
+    opt_dry_run     = False;
 
 
 ################################################################################
@@ -71,10 +72,12 @@ class Constants:
     FLAG_BACKUP_PATH  =      "backup-path";
     FLAG_INTERACTIVE  = "i", "interactive";
     FLAG_PROJECT_NAME = "n", "project-name";
+    FLAG_DRY_RUN      =       "dry-run";
 
     ALL_FLAGS_SHORT = "hvin:";
     ALL_FLAGS_LONG  = ["help", "version", "ext=",
-                       "backup-path=", "interactive", "project-name="];
+                       "backup-path=", "interactive", "dry-run",
+                       "project-name="];
 
     DEFAULT_BACKUP_PATH   = "/tmp/cppguardchecker";
     DEFAULT_EXT_HEADER    = [".h"];
@@ -82,7 +85,7 @@ class Constants:
 
     #App
     APP_NAME      = "cpp-guard-checker";
-    APP_VERSION   = "0.1.2";
+    APP_VERSION   = "0.1.3";
     APP_AUTHOR    = "N2OMatt <n2omatt@amazingcow.com>"
     APP_COPYRIGHT = "\n".join(("Copyright (c) 2015 - Amazing Cow",
                                "This is a free software (GPLv3) - Share/Hack it",
@@ -109,7 +112,8 @@ def yellow_color(msg):
 ################################################################################
 def print_help():
     help = """Usage:
-  cpp-guard-checker [-hv] [-i] [-n <project_name>] [--ext <ext>] [--backup-dir <path>] <project_root>
+  cpp-guard-checker [-hv] [-i] [-n <project_name>] [--dry-run]
+                    [--ext <ext>] [--backup-dir <path>] <project_root>
 
 Options:
  *-h --help              : Show this screen.
@@ -118,6 +122,7 @@ Options:
   -n --project-name      : Set the Project Name (First part of include guard).
      --ext        <ext>  : Add the file extension to search. (Must include the dot)
      --backup-dir <path> : Where the original files will be backup-ed.
+     --dry-run           : No modifications will actually be made.
 
 Notes:
   If <project_root> is blank the current dir is assumed.
@@ -155,6 +160,7 @@ def print_run_warning():
 def print_run_info():
     print "Run Options";
     print "Interactive  :", Globals.opt_interactive;
+    print "Dry Run      :", Globals.opt_dry_run;
     print "Backup path  :", Globals.backup_path;
     print "File exts    :",  " ".join(Globals.file_exts);
     print "Project root :", Globals.project_root;
@@ -254,6 +260,10 @@ def check_file(root, filename):
         print "  Expected :", green_color(correct_guard);
         print "  Found    :", red_color(current_guard);
 
+        if(Globals.opt_dry_run):
+            print magenta_color("[DRY RUN]");
+            return;
+
         #If running in non interactive mode, or user asks to correct the guard.
         if(not Globals.opt_interactive or should_correct_guard_prompt()):
             back_path = fix_guard(fullpath, current_guard, correct_guard);
@@ -298,6 +308,7 @@ def main():
         if  (key in Constants.FLAG_HELP        ): help_resquested         = True;
         elif(key in Constants.FLAG_VERSION     ): version_requested       = True;
         elif(key in Constants.FLAG_INTERACTIVE ): Globals.opt_interactive = True;
+        elif(key in Constants.FLAG_DRY_RUN     ): Globals.opt_dry_run     = True;
         elif(key in Constants.FLAG_BACKUP_PATH ): Globals.backup_path     = value;
         elif(key in Constants.FLAG_PROJECT_NAME): Globals.project_name    = value;
         elif(key in Constants.FLAG_EXT         ): Globals.file_exts.append(value);
