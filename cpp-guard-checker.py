@@ -54,9 +54,9 @@ import getopt;
 ################################################################################
 class Globals:
     file_exts    = [];
-    backup_path  = "";
-    project_root = "";
-    project_name = "";
+    backup_path  = None;
+    project_root = None;
+    project_name = None;
 
     opt_interactive = False;
 
@@ -65,15 +65,16 @@ class Globals:
 ## Constants                                                                  ##
 ################################################################################
 class Constants:
-    FLAG_HELP        = "h", "help";
-    FLAG_VERSION     = "v", "version";
-    FLAG_EXT         =      "ext";
-    FLAG_BACKUP_PATH =      "backup-path";
-    FLAG_INTERACTIVE = "i", "interactive";
+    FLAG_HELP         = "h", "help";
+    FLAG_VERSION      = "v", "version";
+    FLAG_EXT          =      "ext";
+    FLAG_BACKUP_PATH  =      "backup-path";
+    FLAG_INTERACTIVE  = "i", "interactive";
+    FLAG_PROJECT_NAME = "n", "project-name";
 
-    ALL_FLAGS_SHORT = "hvi";
+    ALL_FLAGS_SHORT = "hvin:";
     ALL_FLAGS_LONG  = ["help", "version", "ext=",
-                       "backup-path=", "interactive"];
+                       "backup-path=", "interactive", "project-name="];
 
     DEFAULT_BACKUP_PATH   = "/tmp/cppguardchecker";
     DEFAULT_EXT_HEADER    = [".h"];
@@ -81,7 +82,7 @@ class Constants:
 
     #App
     APP_NAME      = "cpp-guard-checker";
-    APP_VERSION   = "0.1.1";
+    APP_VERSION   = "0.1.2";
     APP_AUTHOR    = "N2OMatt <n2omatt@amazingcow.com>"
     APP_COPYRIGHT = "\n".join(("Copyright (c) 2015 - Amazing Cow",
                                "This is a free software (GPLv3) - Share/Hack it",
@@ -108,14 +109,24 @@ def yellow_color(msg):
 ################################################################################
 def print_help():
     help = """Usage:
-  cpp-guard-checker [-hv] [-i] [--ext <ext>] [--backup-dir <path>] <project root>
+  cpp-guard-checker [-hv] [-i] [-n <project_name>] [--ext <ext>] [--backup-dir <path>] <project_root>
 
-  -h --help           : Show this screen.
-  -v --version        : Show app version and copyright.
-  -i --interactive    : Runs in interactive mode (Asks before make a change).
-  --ext        <ext>  : Add the file extension to search. (Must include the dot)
-  --backup-dir <path> : Where the original files will be backup.
-"""
+Options:
+ *-h --help              : Show this screen.
+ *-v --version           : Show app version and copyright.
+  -i --interactive       : Runs in interactive mode (Asks before make a change).
+  -n --project-name      : Set the Project Name (First part of include guard).
+     --ext        <ext>  : Add the file extension to search. (Must include the dot)
+     --backup-dir <path> : Where the original files will be backup-ed.
+
+Notes:
+  If <project_root> is blank the current dir is assumed.
+  If --project-name is not set the Project Name is assumed as the last part of <project_root>.
+  Multiple --ext <ext> can be used.
+
+  Options marked with * are exclusive, i.e. the cpp-guard-checker will run that
+  and exit successfully after the operation.
+  """;
     print help;
     exit(0);
 
@@ -288,6 +299,7 @@ def main():
         elif(key in Constants.FLAG_VERSION     ): version_requested       = True;
         elif(key in Constants.FLAG_INTERACTIVE ): Globals.opt_interactive = True;
         elif(key in Constants.FLAG_BACKUP_PATH ): Globals.backup_path     = value;
+        elif(key in Constants.FLAG_PROJECT_NAME): Globals.project_name    = value;
         elif(key in Constants.FLAG_EXT         ): Globals.file_exts.append(value);
 
 
@@ -300,15 +312,19 @@ def main():
         Globals.project_root = options[1][0];
 
     #Check if user passed custom info, if not set the defaults.
-    if(len(Globals.backup_path) == 0):
+    #Backup path.
+    if(Globals.backup_path is None or len(Globals.backup_path) == 0):
         Globals.backup_path = Constants.DEFAULT_BACKUP_PATH;
+    #File extensions.
     if(len(Globals.file_exts) == 0):
         Globals.file_exts = Constants.DEFAULT_EXT_HEADER;
-    if(len(Globals.project_root) == 0):
+    #Project Root.
+    if(Globals.project_root is None or len(Globals.project_root) == 0):
         Globals.project_root = Constants.DEFAULT_PROJECT_ROOT;
+    #Project Name.
+    if(Globals.project_name is None or len(Globals.project_name) == 0):
+        Globals.project_name = os.path.basename(expand_path(Globals.project_root));
 
-    #Set the project name.
-    Globals.project_name = os.path.basename(expand_path(Globals.project_root));
     #Set the backup path
     Globals.backup_path = os.path.join(Globals.backup_path,
                                        Globals.project_name + "_BACKUP");
