@@ -30,19 +30,33 @@ to better fit your needs :)
 
 ## Install:
 
-```$ sudo ln -f path/to/cpp-guard-checker.py /usr/local/bin/cpp-guard-checker```
+```$ sudo cp -f path/to/cpp-guard-checker.py /usr/local/bin/cpp-guard-checker```
+
+or use the makefile
+
+```$ make install ```
 
 ## Usage:
 
 ```
-  cpp-guard-checker [-hv] [-i] [--ext <ext>] [--backup-dir <path>] <project root>
+cpp-guard-checker [-hv] [-i] [-n <project_name>] [--ext <ext>] [--backup-dir <path>] <project_root>
 
-  -h --help           : Show this screen.
-  -v --version        : Show app version and copyright.
-  -i --interactive    : Runs in interactive mode (Asks before make a change).
-  --ext <ext>         : Add the file extension to search. (Must include the dot)
-  --backup-dir <path> : Where the original files will be backup.
+Options:
+ *-h --help              : Show this screen.
+ *-v --version           : Show app version and copyright.
+  -i --interactive       : Runs in interactive mode (Asks before make a change).
+  -n --project-name      : Set the Project Name (First part of include guard).
+     --ext        <ext>  : Add the file extension to search. (Must include the dot)
+     --backup-dir <path> : Where the original files will be backup-ed.
 ```
+
+##### Notes:
+If ```<project_root>``` is blank the current dir is assumed.  
+If ```--project-name``` is not set the Project Name is assumed as last part of ```<project_root>```   
+Multiple ```--ext <ext>``` can be used.
+
+Options marked with * are exclusive, i.e. ```the cpp-guard-checker``` will run that
+and exit successfully after the operation.
 
 ## Warning
 ***THIS IS A VERY, VERY DANGEROUS PROGRAM. IT WILL MESS WITH YOUR SOURCES.  
