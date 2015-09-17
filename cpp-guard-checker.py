@@ -60,6 +60,7 @@ class Globals:
 
     opt_interactive = False;
 
+
 ################################################################################
 ## Constants                                                                  ##
 ################################################################################
@@ -86,6 +87,7 @@ class Constants:
                                "This is a free software (GPLv3) - Share/Hack it",
                                "Check opensource.amazingcow.com for more :)"));
 
+
 ################################################################################
 ## Color Functions                                                            ##
 ################################################################################
@@ -99,6 +101,7 @@ def magenta_color(msg):
     return termcolor.colored(msg, "magenta");
 def yellow_color(msg):
     return termcolor.colored(msg, "yellow");
+
 
 ################################################################################
 ## Helper Functions                                                           ##
@@ -165,6 +168,7 @@ def expand_path(path):
     return os.path.abspath(os.path.expanduser(path));
 def normalize_path(path):
     return os.path.normpath(expand_path(path));
+
 
 ################################################################################
 ## Guard Related Functions                                                    ##
@@ -253,6 +257,7 @@ def scan():
             filename, fileext = os.path.splitext(file);
             if(fileext in Globals.file_exts):
                 check_file(root, file);
+
 
 ################################################################################
 ## Script Initialization                                                      ##
