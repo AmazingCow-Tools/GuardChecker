@@ -117,6 +117,7 @@ def print_help():
   --backup-dir <path> : Where the original files will be backup.
 """
     print help;
+    exit(0);
 
 def print_version():
     print "{} - {} - {}".format(Constants.APP_NAME,
@@ -124,6 +125,7 @@ def print_version():
                                     Constants.APP_AUTHOR);
     print Constants.APP_COPYRIGHT;
     print;
+    exit(0);
 
 def print_run_warning():
     msg = """WARNING:
@@ -282,29 +284,16 @@ def main():
         key = key.lstrip("-");
 
         #Check if flags are present.
-        #Help.
-        if(key in Constants.FLAG_HELP):
-            help_resquested = True;
-        #Version.
-        elif(key in Constants.FLAG_VERSION):
-            version_requested = True;
-        #Interactive.
-        elif(key in Constants.FLAG_INTERACTIVE):
-            Globals.opt_interactive = True;
-        #Backup Path.
-        elif(key in Constants.FLAG_BACKUP_PATH):
-            Globals.backup_path = value;
-        #File Extensions.
-        elif(key in Constants.FLAG_EXT):
-            Globals.file_exts.append(value);
+        if  (key in Constants.FLAG_HELP        ): help_resquested         = True;
+        elif(key in Constants.FLAG_VERSION     ): version_requested       = True;
+        elif(key in Constants.FLAG_INTERACTIVE ): Globals.opt_interactive = True;
+        elif(key in Constants.FLAG_BACKUP_PATH ): Globals.backup_path     = value;
+        elif(key in Constants.FLAG_EXT         ): Globals.file_exts.append(value);
+
 
     #Check if the exclusive operations are requested.
-    if(help_resquested):
-        print_help();
-        exit(0);
-    if(version_requested):
-        print_version();
-        exit(0);
+    if(help_resquested  ): print_help();
+    if(version_requested): print_version();
 
     #Check if user passed the project root.
     if(len(options[1]) != 0):
