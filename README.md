@@ -3,7 +3,7 @@ cpp-guard-checker
 Made with <3 by [Amazing Cow](http://www.amazingcow.com).
 
 ## Intro:
-**Check and correct the include guards in our C++ files. **
+**Check and correct the include guards in our C++ files.**
  
 Basically our includes guards are formated in the way of:
     
