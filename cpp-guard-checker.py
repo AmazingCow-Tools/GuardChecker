@@ -137,8 +137,8 @@ Notes:
 
 def print_version():
     print "{} - {} - {}".format(Constants.APP_NAME,
-                                    Constants.APP_VERSION,
-                                    Constants.APP_AUTHOR);
+                                Constants.APP_VERSION,
+                                Constants.APP_AUTHOR);
     print Constants.APP_COPYRIGHT;
     print;
     exit(0);
