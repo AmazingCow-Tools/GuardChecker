@@ -271,7 +271,7 @@ def check_file(root, filename):
 
 def scan():
     #Change the current working directory to the directory
-    #of project root. We do this bacause ease **all** other operations.
+    #of project root. We do this because ease **all** other operations.
     os.chdir(Globals.project_root);
 
     ## Scan the directories.
@@ -295,7 +295,7 @@ def main():
         print red_color("[ERROR]"), e;
         exit(1);
 
-    #Optiongs switches.
+    #Options switches.
     help_resquested   = False;
     version_requested = False;
 
@@ -303,7 +303,7 @@ def main():
     for option in options[0]:
         key, value = option;
         key = key.lstrip("-");
-
+         
         #Check if flags are present.
         if  (key in Constants.FLAG_HELP        ): help_resquested         = True;
         elif(key in Constants.FLAG_VERSION     ): version_requested       = True;
