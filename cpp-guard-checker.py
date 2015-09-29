@@ -68,11 +68,11 @@ class Globals:
 class Constants:
     FLAG_HELP         = "h", "help";
     FLAG_VERSION      = "v", "version";
-    FLAG_EXT          =      "ext";
-    FLAG_BACKUP_PATH  =      "backup-path";
+    FLAG_EXT          =  "", "ext";
+    FLAG_BACKUP_PATH  =  "", "backup-path";
     FLAG_INTERACTIVE  = "i", "interactive";
     FLAG_PROJECT_NAME = "n", "project-name";
-    FLAG_DRY_RUN      =       "dry-run";
+    FLAG_DRY_RUN      =  "", "dry-run";
 
     ALL_FLAGS_SHORT = "hvin:";
     ALL_FLAGS_LONG  = ["help", "version", "ext=",
