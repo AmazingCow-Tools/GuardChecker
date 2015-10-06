@@ -1,4 +1,4 @@
-cpp-guard-checker
+Cpp Guard Checker
 ====
 Made with <3 by [Amazing Cow](http://www.amazingcow.com).
 
