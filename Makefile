@@ -42,7 +42,7 @@
 
 install:
 	cp -f cpp-guard-checker.py /usr/local/bin/cpp-guard-checker
-	chmod 744 /usr/local/bin/cpp-guard-checker
+	chmod 755 /usr/local/bin/cpp-guard-checker
 
 uninstall:
 	rm /usr/local/bin/cpp-guard-checker
