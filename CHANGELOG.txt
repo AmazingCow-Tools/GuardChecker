@@ -10,6 +10,9 @@ version 0.1.3
                 the sources but will perform all other operations.
 
 version 0.1.4
-[Sep 29 2015] - Fix a bug in command line parsing. The -n flag was being 
+[Sep 29 2015] - Fix a bug in command line parsing. The -n flag was being
                 interpreted as --dry-run flag.
-                
+
+version 0.1.5
+[Oct 28 2015] - Add the force flag. So now we are not prompt anything if
+                using it.

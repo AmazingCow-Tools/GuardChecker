@@ -59,6 +59,7 @@ class Globals:
     project_name = None;
 
     opt_interactive = False;
+    opt_force       = False;
     opt_dry_run     = False;
 
 
@@ -71,12 +72,19 @@ class Constants:
     FLAG_EXT          =  "", "ext";
     FLAG_BACKUP_PATH  =  "", "backup-path";
     FLAG_INTERACTIVE  = "i", "interactive";
+    FLAG_FORCE        =  "", "force";
     FLAG_PROJECT_NAME = "n", "project-name";
     FLAG_DRY_RUN      =  "", "dry-run";
 
+
     ALL_FLAGS_SHORT = "hvin:";
-    ALL_FLAGS_LONG  = ["help", "version", "ext=",
-                       "backup-path=", "interactive", "dry-run",
+    ALL_FLAGS_LONG  = ["help",
+                       "version",
+                       "ext=",
+                       "backup-path=",
+                       "interactive",
+                       "force",
+                       "dry-run",
                        "project-name="];
 
     DEFAULT_BACKUP_PATH   = "/tmp/cppguardchecker";
@@ -85,7 +93,7 @@ class Constants:
 
     #App
     APP_NAME      = "cpp-guard-checker";
-    APP_VERSION   = "0.1.3";
+    APP_VERSION   = "0.1.5";
     APP_AUTHOR    = "N2OMatt <n2omatt@amazingcow.com>"
     APP_COPYRIGHT = "\n".join(("Copyright (c) 2015 - Amazing Cow",
                                "This is a free software (GPLv3) - Share/Hack it",
@@ -119,6 +127,7 @@ Options:
  *-h --help              : Show this screen.
  *-v --version           : Show app version and copyright.
   -i --interactive       : Runs in interactive mode (Asks before make a change).
+     --force             : Don't prompt anything... (Overriden by -i).
   -n --project-name      : Set the Project Name (First part of include guard).
      --ext        <ext>  : Add the file extension to search. (Must include the dot)
      --backup-dir <path> : Where the original files will be backup-ed.
@@ -303,11 +312,12 @@ def main():
     for option in options[0]:
         key, value = option;
         key = key.lstrip("-");
-         
+
         #Check if flags are present.
         if  (key in Constants.FLAG_HELP        ): help_resquested         = True;
         elif(key in Constants.FLAG_VERSION     ): version_requested       = True;
         elif(key in Constants.FLAG_INTERACTIVE ): Globals.opt_interactive = True;
+        elif(key in Constants.FLAG_FORCE       ): Globals.opt_force       = True;
         elif(key in Constants.FLAG_DRY_RUN     ): Globals.opt_dry_run     = True;
         elif(key in Constants.FLAG_BACKUP_PATH ): Globals.backup_path     = value;
         elif(key in Constants.FLAG_PROJECT_NAME): Globals.project_name    = value;
@@ -340,12 +350,17 @@ def main():
     Globals.backup_path = os.path.join(Globals.backup_path,
                                        Globals.project_name + "_BACKUP");
 
+    #Interactive flag ALWAYS override the force flag.
+    if(Globals.opt_interactive == True):
+        Globals.opt_force = False;
+
     #Print the program start up info.
-    print_run_warning();
-    print_run_info();
-    if(not should_continue_run_prompt()):
-        print yellow_color("Aborting...");
-        exit(0);
+    if(Globals.opt_force == False):
+        print_run_warning();
+        print_run_info();
+        if(not should_continue_run_prompt()):
+            print yellow_color("Aborting...");
+            exit(0);
 
     # Start...
     scan();
