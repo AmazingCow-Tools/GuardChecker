@@ -46,6 +46,7 @@ Options:
  *-h --help              : Show this screen.
  *-v --version           : Show app version and copyright.
   -i --interactive       : Runs in interactive mode (Asks before make a change).
+     --force             : Don't prompt anything... (Overriden by -i).
   -n --project-name      : Set the Project Name (First part of include guard).
      --ext        <ext>  : Add the file extension to search. (Must include the dot)
      --backup-dir <path> : Where the original files will be backup-ed.
