@@ -45,9 +45,16 @@
 import os;
 import os.path;
 import re;
-import termcolor;
 import sys;
 import getopt;
+
+## Termcolor isn't a default package so do not
+## force the users have it.
+try:
+    from termcolor import colord;
+except Exception, e:
+    def colored(msg, color):
+        return msg;
 
 ################################################################################
 ## Globals                                                                    ##
@@ -104,15 +111,15 @@ class Constants:
 ## Color Functions                                                            ##
 ################################################################################
 def red_color(msg):
-    return termcolor.colored(msg, "red");
+    return colored(msg, "red");
 def green_color(msg):
-    return termcolor.colored(msg, "green");
+    return colored(msg, "green");
 def blue_color(msg):
-    return termcolor.colored(msg, "blue");
+    return colored(msg, "blue");
 def magenta_color(msg):
-    return termcolor.colored(msg, "magenta");
+    return colored(msg, "magenta");
 def yellow_color(msg):
-    return termcolor.colored(msg, "yellow");
+    return colored(msg, "yellow");
 
 
 ################################################################################
