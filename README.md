@@ -40,36 +40,39 @@ or use the makefile
 
 ```
 cpp-guard-checker [-hv] [-i] [-n <project_name>] [--dry-run]
-                    [--ext <ext>] [--backup-dir <path>] <project_root>
-
+                    [--ext <ext>] [--backup-dir <path>]
+                    [-e <path>]  <project_root>
 Options:
- *-h --help              : Show this screen.
- *-v --version           : Show app version and copyright.
-  -i --interactive       : Runs in interactive mode (Asks before make a change).
-     --force             : Don't prompt anything... (Overriden by -i).
-  -n --project-name      : Set the Project Name (First part of include guard).
-     --ext        <ext>  : Add the file extension to search. (Must include the dot)
-     --backup-dir <path> : Where the original files will be backup-ed.
-     --dry-run           : No modifications will actually be made.
+ *-h --help                 : Show this screen.
+ *-v --version              : Show app version and copyright.
+  -i --interactive          : Runs in interactive mode (Asks before make a change).
+     --force                : Don't prompt anything... (Overriden by -i).
+  -n --project-name         : Set the Project Name (First part of include guard).
+     --ext        <ext>     : Add the file extension to search. (Must include the dot)
+     --backup-dir <path>    : Where the original files will be backup-ed.
+     --dry-run              : No modifications will actually be made.
+  -e --exclude-path <path>  : The path (and all its children) is skipped.
+
 ```
 
 ##### Notes:
 If ```<project_root>``` is blank the current dir is assumed.  
 If ```--project-name``` is not set the Project Name is assumed as last part of ```<project_root>```   
 Multiple ```--ext <ext>``` can be used.
+Multiple ```--exclude-path <path>``` can be used.
 
 Options marked with * are exclusive, i.e. ```the cpp-guard-checker``` will run that
 and exit successfully after the operation.
 
 ## Warning
 ***THIS IS A VERY, VERY DANGEROUS PROGRAM. IT WILL MESS WITH YOUR SOURCES.  
-    THE PROGRAM WILL MAKE A BACKUP AT (```/tmp/cppguardchecker```) BUT IS STRONGLY ADVISED  
-    THAT YOU CREATE A HANDMADE BACKUP BEFORE AND PASS ANOTHER CUSTOM BACKUP PATH.  
-    CURRENTLY IT IS VERY DUMB TO SEEK THE INCLUDE GUARDS, SO IS VERY WISE  
-    TO RUN IT IN A INTERACTIVE MODE (```-i | --interactive```) TO CHECK THE CHANGES  
-    BEFORE THEM HAPPEN.  
-    RUN THIS AT YOUR OWN RISK, WORKS PRETTY WELL IF USED WITH CARE.  
-    ENJOY...***
+THE PROGRAM WILL MAKE A BACKUP AT (```/tmp/cppguardchecker```) BUT IS STRONGLY ADVISED  
+THAT YOU CREATE A HANDMADE BACKUP BEFORE AND PASS ANOTHER CUSTOM BACKUP PATH.  
+CURRENTLY IT IS VERY DUMB TO SEEK THE INCLUDE GUARDS, SO IS VERY WISE  
+TO RUN IT IN A INTERACTIVE MODE (```-i | --interactive```) TO CHECK THE CHANGES  
+BEFORE THEM HAPPEN.  
+RUN THIS AT YOUR OWN RISK, WORKS PRETTY WELL IF USED WITH CARE.  
+ENJOY...***
 
 ## License:
 This software is released under GPLv3.

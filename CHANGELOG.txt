@@ -16,3 +16,10 @@ version 0.1.4
 version 0.1.5
 [Oct 28 2015] - Add the force flag. So now we are not prompt anything if
                 using it.
+
+version 0.1.6
+[Nov 23 2015] - Remove the requirement on termcolor package since it's not
+                a default package and there is no reason to force it.
+                (But is enabled if user has the package already installed).
+                Add a flag to specify directories to exclude from the process.
+

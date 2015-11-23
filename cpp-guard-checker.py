@@ -51,7 +51,7 @@ import getopt;
 ## Termcolor isn't a default package so do not
 ## force the users have it.
 try:
-    from termcolor import colord;
+    from termcolor import colored;
 except Exception, e:
     def colored(msg, color):
         return msg;
@@ -60,8 +60,11 @@ except Exception, e:
 ## Globals                                                                    ##
 ################################################################################
 class Globals:
-    file_exts    = [];
-    backup_path  = None;
+    file_exts  = [];
+
+    backup_path   = None;
+    exclude_paths = [];
+
     project_root = None;
     project_name = None;
 
@@ -74,17 +77,17 @@ class Globals:
 ## Constants                                                                  ##
 ################################################################################
 class Constants:
-    FLAG_HELP         = "h", "help";
-    FLAG_VERSION      = "v", "version";
-    FLAG_EXT          =  "", "ext";
-    FLAG_BACKUP_PATH  =  "", "backup-path";
-    FLAG_INTERACTIVE  = "i", "interactive";
-    FLAG_FORCE        =  "", "force";
-    FLAG_PROJECT_NAME = "n", "project-name";
-    FLAG_DRY_RUN      =  "", "dry-run";
+    FLAG_HELP          = "h", "help";
+    FLAG_VERSION       = "v", "version";
+    FLAG_EXT           =  "", "ext";
+    FLAG_BACKUP_PATH   =  "", "backup-path";
+    FLAG_INTERACTIVE   = "i", "interactive";
+    FLAG_FORCE         =  "", "force";
+    FLAG_PROJECT_NAME  = "n", "project-name";
+    FLAG_DRY_RUN       =  "", "dry-run";
+    FLAG_EXCLUDE_PATHS = "e", "exclude-path"
 
-
-    ALL_FLAGS_SHORT = "hvin:";
+    ALL_FLAGS_SHORT = "hvin:e:";
     ALL_FLAGS_LONG  = ["help",
                        "version",
                        "ext=",
@@ -92,7 +95,8 @@ class Constants:
                        "interactive",
                        "force",
                        "dry-run",
-                       "project-name="];
+                       "project-name=",
+                       "exclude-path="];
 
     DEFAULT_BACKUP_PATH   = "/tmp/cppguardchecker";
     DEFAULT_EXT_HEADER    = [".h"];
@@ -100,7 +104,7 @@ class Constants:
 
     #App
     APP_NAME      = "cpp-guard-checker";
-    APP_VERSION   = "0.1.5";
+    APP_VERSION   = "0.1.6";
     APP_AUTHOR    = "N2OMatt <n2omatt@amazingcow.com>"
     APP_COPYRIGHT = "\n".join(("Copyright (c) 2015 - Amazing Cow",
                                "This is a free software (GPLv3) - Share/Hack it",
@@ -128,22 +132,26 @@ def yellow_color(msg):
 def print_help():
     help = """Usage:
   cpp-guard-checker [-hv] [-i] [-n <project_name>] [--dry-run]
-                    [--ext <ext>] [--backup-dir <path>] <project_root>
+                    [--ext <ext>] [--backup-dir <path>]
+                    [-e <path>]  <project_root>
 
 Options:
- *-h --help              : Show this screen.
- *-v --version           : Show app version and copyright.
-  -i --interactive       : Runs in interactive mode (Asks before make a change).
-     --force             : Don't prompt anything... (Overriden by -i).
-  -n --project-name      : Set the Project Name (First part of include guard).
-     --ext        <ext>  : Add the file extension to search. (Must include the dot)
-     --backup-dir <path> : Where the original files will be backup-ed.
-     --dry-run           : No modifications will actually be made.
+ *-h --help                 : Show this screen.
+ *-v --version              : Show app version and copyright.
+  -i --interactive          : Runs in interactive mode (Asks before make a change).
+     --force                : Don't prompt anything... (Overriden by -i).
+  -n --project-name         : Set the Project Name (First part of include guard).
+     --ext        <ext>     : Add the file extension to search. (Must include the dot)
+     --backup-dir <path>    : Where the original files will be backup-ed.
+     --dry-run              : No modifications will actually be made.
+  -e --exclude-path <path>  : The path (and all its children) is skipped.
 
 Notes:
   If <project_root> is blank the current dir is assumed.
   If --project-name is not set the Project Name is assumed as the last part of <project_root>.
+
   Multiple --ext <ext> can be used.
+  Multiple --exclude-path <path> can be used.
 
   Options marked with * are exclusive, i.e. the cpp-guard-checker will run that
   and exit successfully after the operation.
@@ -175,12 +183,13 @@ def print_run_warning():
 
 def print_run_info():
     print "Run Options";
-    print "Interactive  :", Globals.opt_interactive;
-    print "Dry Run      :", Globals.opt_dry_run;
-    print "Backup path  :", Globals.backup_path;
-    print "File exts    :",  " ".join(Globals.file_exts);
-    print "Project root :", Globals.project_root;
-    print "Project name :", Globals.project_name;
+    print "Interactive   :", Globals.opt_interactive;
+    print "Dry Run       :", Globals.opt_dry_run;
+    print "Backup path   :", Globals.backup_path;
+    print "File exts     :",  " ".join(Globals.file_exts);
+    print "Project root  :", Globals.project_root;
+    print "Project name  :", Globals.project_name;
+    print "Exclude Paths :", Globals.exclude_paths;
 
 def should_correct_guard_prompt():
     r = raw_input("Correct the guard? [Y/n]:");
@@ -292,6 +301,12 @@ def scan():
 
     ## Scan the directories.
     for root, dirs, files in os.walk(".", topdown=True):
+        if(expand_path(root) in Globals.exclude_paths):
+            print blue_color("[SKIPPING]:"), magenta_color(root);
+            dirs [:] = [];
+            files[:] = [];
+            continue;
+
         for file in files:
             filename, fileext = os.path.splitext(file);
             if(fileext in Globals.file_exts):
@@ -321,14 +336,15 @@ def main():
         key = key.lstrip("-");
 
         #Check if flags are present.
-        if  (key in Constants.FLAG_HELP        ): help_resquested         = True;
-        elif(key in Constants.FLAG_VERSION     ): version_requested       = True;
-        elif(key in Constants.FLAG_INTERACTIVE ): Globals.opt_interactive = True;
-        elif(key in Constants.FLAG_FORCE       ): Globals.opt_force       = True;
-        elif(key in Constants.FLAG_DRY_RUN     ): Globals.opt_dry_run     = True;
-        elif(key in Constants.FLAG_BACKUP_PATH ): Globals.backup_path     = value;
-        elif(key in Constants.FLAG_PROJECT_NAME): Globals.project_name    = value;
-        elif(key in Constants.FLAG_EXT         ): Globals.file_exts.append(value);
+        if  (key in Constants.FLAG_HELP         ): help_resquested         = True;
+        elif(key in Constants.FLAG_VERSION      ): version_requested       = True;
+        elif(key in Constants.FLAG_INTERACTIVE  ): Globals.opt_interactive = True;
+        elif(key in Constants.FLAG_FORCE        ): Globals.opt_force       = True;
+        elif(key in Constants.FLAG_DRY_RUN      ): Globals.opt_dry_run     = True;
+        elif(key in Constants.FLAG_BACKUP_PATH  ): Globals.backup_path     = value;
+        elif(key in Constants.FLAG_PROJECT_NAME ): Globals.project_name    = value;
+        elif(key in Constants.FLAG_EXT          ): Globals.file_exts.append(value);
+        elif(key in Constants.FLAG_EXCLUDE_PATHS): Globals.exclude_paths.append(value);
 
 
     #Check if the exclusive operations are requested.
@@ -368,6 +384,9 @@ def main():
         if(not should_continue_run_prompt()):
             print yellow_color("Aborting...");
             exit(0);
+
+    #Expand all excluded paths.
+    Globals.exclude_paths = map(expand_path, Globals.exclude_paths);
 
     # Start...
     scan();
