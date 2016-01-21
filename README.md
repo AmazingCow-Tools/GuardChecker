@@ -1,9 +1,10 @@
-Cpp Guard Checker
+GuardChecker
 ====
+
 Made with <3 by [Amazing Cow](http://www.amazingcow.com).
 
 ## Intro:
-**Check and correct the include guards in our C++ files.**
+**Check and correct the include guards in our C/C++ files.**
  
 Basically our includes guards are formated in the way of:
     
@@ -28,20 +29,26 @@ Since we made this to fit our needs, it's probably doesn't fits
 what you expects/needs, but you're **very welcomed** to **hack it** 
 to better fit your needs :)
 
+
+<!-- ####################################################################### -->
+
 ## Install:
 
-```$ sudo cp -f path/to/cpp-guard-checker.py /usr/local/bin/cpp-guard-checker```
+```$ sudo cp -f path/to/guardchecker.py /usr/local/bin/guardchecker```
 
 or use the makefile
 
 ```$ make install ```
 
+
+<!-- ####################################################################### -->
+
 ## Usage:
 
 ```
-cpp-guard-checker [-hv] [-i] [-n <project_name>] [--dry-run]
-                    [--ext <ext>] [--backup-dir <path>]
-                    [-e <path>]  <project_root>
+guardchecker [-hv] [-i] [-n <project_name>] [--dry-run]
+             [--ext <ext>] [--backup-dir <path>]
+             [-e <path>]  <project_root>
 Options:
  *-h --help                 : Show this screen.
  *-v --version              : Show app version and copyright.
@@ -61,12 +68,12 @@ If ```--project-name``` is not set the Project Name is assumed as last part of `
 Multiple ```--ext <ext>``` can be used.
 Multiple ```--exclude-path <path>``` can be used.
 
-Options marked with * are exclusive, i.e. ```the cpp-guard-checker``` will run that
+Options marked with * are exclusive, i.e. ```the guardchecker``` will run that
 and exit successfully after the operation.
 
 ## Warning
 ***THIS IS A VERY, VERY DANGEROUS PROGRAM. IT WILL MESS WITH YOUR SOURCES.  
-THE PROGRAM WILL MAKE A BACKUP AT (```/tmp/cppguardchecker```) BUT IS STRONGLY ADVISED  
+THE PROGRAM WILL MAKE A BACKUP AT (```/tmp/guardchecker```) BUT IS STRONGLY ADVISED  
 THAT YOU CREATE A HANDMADE BACKUP BEFORE AND PASS ANOTHER CUSTOM BACKUP PATH.  
 CURRENTLY IT IS VERY DUMB TO SEEK THE INCLUDE GUARDS, SO IS VERY WISE  
 TO RUN IT IN A INTERACTIVE MODE (```-i | --interactive```) TO CHECK THE CHANGES  
@@ -74,11 +81,20 @@ BEFORE THEM HAPPEN.
 RUN THIS AT YOUR OWN RISK, WORKS PRETTY WELL IF USED WITH CARE.  
 ENJOY...***
 
+
+<!-- ####################################################################### -->
+
 ## License:
 This software is released under GPLv3.
 
+
+<!-- ####################################################################### -->
+
 ## TODO:
 Check the TODO file.
+
+
+<!-- ####################################################################### -->
 
 ## Others:
 Check our repos and take a look at our [open source site](http://opensource.amazingcow.com).

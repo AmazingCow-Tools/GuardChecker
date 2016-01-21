@@ -23,3 +23,11 @@ version 0.1.6
                 (But is enabled if user has the package already installed).
                 Add a flag to specify directories to exclude from the process.
 
+
+===============================================================================
+
+version 0.2.0
+[Jan 21 2016] - Change the name of project.
+                Rename the files.
+                Add the "comment separators" on README.
+                Update the Makefile.

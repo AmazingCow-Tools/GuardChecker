@@ -4,15 +4,14 @@
 ##               █      █                                                     ##
 ##               ████████                                                     ##
 ##             ██        ██                                                   ##
-##            ███  █  █  ███                                                  ##
-##            █ █        █ █        main.py                                   ##
-##             ████████████         cpp-guard-checker                         ##
-##           █              █       Copyright (c) 2015 AmazingCow             ##
-##          █     █    █     █      www.AmazingCow.com                        ##
+##            ███  █  █  ███        guardchecker.py                           ##
+##            █ █        █ █        GuardChecker                              ##
+##             ████████████                                                   ##
+##           █              █       Copyright (c) 2015, 2016                  ##
+##          █     █    █     █      AmazingCow - www.AmazingCow.com           ##
 ##          █     █    █     █                                                ##
 ##           █              █       N2OMatt - n2omatt@amazingcow.com          ##
 ##             ████████████         www.amazingcow.com/n2omatt                ##
-##                                                                            ##
 ##                                                                            ##
 ##                  This software is licensed as GPLv3                        ##
 ##                 CHECK THE COPYING FILE TO MORE DETAILS                     ##
@@ -29,9 +28,9 @@
 ##        (See opensource.AmazingCow.com/acknowledgment.html for details).    ##
 ##        If you will not acknowledge, just send us a email. We'll be         ##
 ##        *VERY* happy to see our work being used by other people. :)         ##
-##        The email is: acknowledgmentopensource@AmazingCow.com               ##
+##        The email is: acknowledgment_opensource@AmazingCow.com              ##
 ##     3. Altered source versions must be plainly marked as such,             ##
-##        and must notbe misrepresented as being the original software.       ##
+##        and must not be misrepresented as being the original software.      ##
 ##     4. This notice may not be removed or altered from any source           ##
 ##        distribution.                                                       ##
 ##     5. Most important, you must have fun. ;)                               ##
@@ -98,15 +97,15 @@ class Constants:
                        "project-name=",
                        "exclude-path="];
 
-    DEFAULT_BACKUP_PATH   = "/tmp/cppguardchecker";
+    DEFAULT_BACKUP_PATH   = "/tmp/guardchecker";
     DEFAULT_EXT_HEADER    = [".h"];
     DEFAULT_PROJECT_ROOT  = "./";
 
     #App
-    APP_NAME      = "cpp-guard-checker";
-    APP_VERSION   = "0.1.6";
+    APP_NAME      = "guardchecker";
+    APP_VERSION   = "0.2.0";
     APP_AUTHOR    = "N2OMatt <n2omatt@amazingcow.com>"
-    APP_COPYRIGHT = "\n".join(("Copyright (c) 2015 - Amazing Cow",
+    APP_COPYRIGHT = "\n".join(("Copyright (c) 2015, 2016 - Amazing Cow",
                                "This is a free software (GPLv3) - Share/Hack it",
                                "Check opensource.amazingcow.com for more :)"));
 
@@ -131,9 +130,9 @@ def yellow_color(msg):
 ################################################################################
 def print_help():
     help = """Usage:
-  cpp-guard-checker [-hv] [-i] [-n <project_name>] [--dry-run]
-                    [--ext <ext>] [--backup-dir <path>]
-                    [-e <path>]  <project_root>
+  guardchecker [-hv] [-i] [-n <project_name>] [--dry-run]
+               [--ext <ext>] [--backup-dir <path>]
+               [-e <path>]  <project_root>
 
 Options:
  *-h --help                 : Show this screen.
@@ -153,7 +152,7 @@ Notes:
   Multiple --ext <ext> can be used.
   Multiple --exclude-path <path> can be used.
 
-  Options marked with * are exclusive, i.e. the cpp-guard-checker will run that
+  Options marked with * are exclusive, i.e. the guardchecker will run that
   and exit successfully after the operation.
   """;
     print help;
