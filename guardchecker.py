@@ -40,14 +40,13 @@
 ##                                  Enjoy :)                                  ##
 ##----------------------------------------------------------------------------##
 
-#COWTODO: Change the termcolor to cowtermcolor.
-
 ## Imports ##
 import getopt;
 import os.path;
 import os;
 import re;
 import sys;
+
 
 ################################################################################
 ## Don't let the standard import error to users - Instead show a              ##
@@ -103,7 +102,6 @@ class Constants:
     FLAG_EXCLUDE_PATHS = "e", "exclude-path"
     FLAG_DRY_RUN       = "D", "dry-run";
 
-
     ALL_FLAGS_SHORT = "".join([
             FLAG_HELP          [0],
             FLAG_VERSION       [0],
@@ -115,6 +113,7 @@ class Constants:
             FLAG_EXCLUDE_PATHS [0] + ":",
             FLAG_DRY_RUN       [0],
       ]);
+
     ALL_FLAGS_LONG = [
             FLAG_HELP          [1],
             FLAG_VERSION       [1],
@@ -133,7 +132,7 @@ class Constants:
 
     #App
     APP_NAME      = "guardchecker";
-    APP_VERSION   = "0.2.0";
+    APP_VERSION   = "0.3.0";
     APP_AUTHOR    = "N2OMatt <n2omatt@amazingcow.com>"
     APP_COPYRIGHT = "\n".join(("Copyright (c) 2015, 2016 - Amazing Cow",
                                "This is a free software (GPLv3) - Share/Hack it",
@@ -169,7 +168,7 @@ Options:
  *-v --version : Show app version and copyright.
 
   -i --interactive : Runs in interactive mode (Asks before make a change).
-  -f --force       : Don't prompt anything... (Overriden by -i).
+  -f --force       : Don't prompt anything... (Overridden by -i).
 
   -n --project-name : Set the Project Name (First part of include guard).
 
@@ -194,6 +193,7 @@ Notes:
   """;
     print help;
     exit(0);
+
 
 def print_version():
     print "{} - {} - {}".format(Constants.APP_NAME,
@@ -221,6 +221,7 @@ def print_run_warning():
                          reset=ColorWarning(auto_reset=True));
     print warning;
 
+
 def print_run_info():
     print "Run Options";
     print "  Interactive   :", Globals.opt_interactive;
@@ -230,6 +231,7 @@ def print_run_info():
     print "  Project root  :", Globals.project_root;
     print "  Project name  :", Globals.project_name;
     print "  Exclude Paths :", Globals.exclude_paths;
+
 
 def should_correct_guard_prompt():
     try:
@@ -241,6 +243,7 @@ def should_correct_guard_prompt():
         print ColorWarning("\nCanceling");
         exit(0);
 
+
 def should_continue_run_prompt():
     try:
         r = raw_input("Run the program? [y/N]:");
@@ -251,20 +254,25 @@ def should_continue_run_prompt():
         print ColorWarning("\nCanceling");
         exit(0);
 
+
 def system_cmd(cmd):
     ret = os.system(cmd);
     if(ret != 0):
         print_fatal("cmd: {}".format(cmd));
 
+
 def expand_path(path):
     return os.path.abspath(os.path.expanduser(path));
+
 
 def normalize_path(path):
     return os.path.normpath(expand_path(path));
 
+
 def print_fatal(msg):
     print ColorError("[FATAL]"), msg;
     exit(1);
+
 
 ################################################################################
 ## Guard Related Functions                                                    ##
@@ -292,8 +300,8 @@ def fix_guard(fullpath, incorrect, correct):
 
     system_cmd(sed_cmd);
 
-    # #Now move the "original" file to backup folder
-    # #and rename the temporary file as the "original".
+    #Now move the "original" file to backup folder
+    #and rename the temporary file as the "original".
     mv_original_cmd = "mv {} {}".format(fullpath, current_backup_path);
     mv_temp_cmd     = "mv {} {}".format(temp_file_path, fullpath);
 
@@ -304,9 +312,11 @@ def fix_guard(fullpath, incorrect, correct):
                                    os.path.basename(fullpath));
     return backup_fullpath;
 
+
 def build_correct_guard(fullpath):
     path = os.path.normpath(os.path.join(Globals.project_name, fullpath));
     return "__{}__".format(path.replace("/", "_").replace(".", "_"));
+
 
 def check_file(root, filename):
     #Make the fullpath for file and open and read all lines.
@@ -316,8 +326,8 @@ def check_file(root, filename):
     #Search entire file for a line with guard.
     for file_line in file_lines:
         #COWTODO: Find a better way to check if we're dealing with an guard.
-        #COWTODO: Find a better way to check if we're dealing with an guard.
-        #COWTODO: Find a better way to check if we're dealing with an guard.
+        #COWHACK: Find a better way to check if we're dealing with an guard.
+        #COWNOTE: Find a better way to check if we're dealing with an guard.
         search_str = "^{}.*".format("#ifndef");
         #Check if we have a include guard.
         if(re.search(search_str, file_line) is None):
@@ -345,6 +355,7 @@ def check_file(root, filename):
         if(not Globals.opt_interactive or should_correct_guard_prompt()):
             back_path = fix_guard(fullpath, current_guard, correct_guard);
             print "  Backup   :", ColorPath(back_path);
+
 
 def scan():
     #Change the current working directory to the directory
