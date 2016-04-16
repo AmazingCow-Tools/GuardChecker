@@ -95,24 +95,37 @@ class Globals:
 class Constants:
     FLAG_HELP          = "h", "help";
     FLAG_VERSION       = "v", "version";
-    FLAG_EXT           =  "", "ext";
-    FLAG_BACKUP_PATH   =  "", "backup-path";
     FLAG_INTERACTIVE   = "i", "interactive";
-    FLAG_FORCE         =  "", "force";
+    FLAG_FORCE         = "f", "force";
     FLAG_PROJECT_NAME  = "n", "project-name";
-    FLAG_DRY_RUN       =  "", "dry-run";
+    FLAG_EXT           = "E", "ext";
+    FLAG_BACKUP_PATH   = "b", "backup-path";
     FLAG_EXCLUDE_PATHS = "e", "exclude-path"
+    FLAG_DRY_RUN       = "D", "dry-run";
 
-    ALL_FLAGS_SHORT = "hvin:e:";
-    ALL_FLAGS_LONG  = ["help",
-                       "version",
-                       "ext=",
-                       "backup-path=",
-                       "interactive",
-                       "force",
-                       "dry-run",
-                       "project-name=",
-                       "exclude-path="];
+
+    ALL_FLAGS_SHORT = "".join([
+            FLAG_HELP          [0],
+            FLAG_VERSION       [0],
+            FLAG_INTERACTIVE   [0],
+            FLAG_FORCE         [0],
+            FLAG_PROJECT_NAME  [0] + ":",
+            FLAG_EXT           [0] + ":",
+            FLAG_BACKUP_PATH   [0] + ":",
+            FLAG_EXCLUDE_PATHS [0] + ":",
+            FLAG_DRY_RUN       [0],
+      ]);
+    ALL_FLAGS_LONG = [
+            FLAG_HELP          [1],
+            FLAG_VERSION       [1],
+            FLAG_INTERACTIVE   [1],
+            FLAG_FORCE         [1],
+            FLAG_PROJECT_NAME  [1] + "=",
+            FLAG_EXT           [1] + "=",
+            FLAG_BACKUP_PATH   [1] + "=",
+            FLAG_EXCLUDE_PATHS [1] + "=",
+            FLAG_DRY_RUN       [1],
+      ];
 
     DEFAULT_BACKUP_PATH   = "/tmp/guardchecker";
     DEFAULT_EXT_HEADER    = [".h"];
