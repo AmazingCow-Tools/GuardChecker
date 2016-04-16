@@ -223,24 +223,33 @@ def print_run_warning():
 
 def print_run_info():
     print "Run Options";
-    print "Interactive   :", Globals.opt_interactive;
-    print "Dry Run       :", Globals.opt_dry_run;
-    print "Backup path   :", Globals.backup_path;
-    print "File exts     :",  " ".join(Globals.file_exts);
-    print "Project root  :", Globals.project_root;
-    print "Project name  :", Globals.project_name;
-    print "Exclude Paths :", Globals.exclude_paths;
+    print "  Interactive   :", Globals.opt_interactive;
+    print "  Dry Run       :", Globals.opt_dry_run;
+    print "  Backup path   :", Globals.backup_path;
+    print "  File exts     :",  " ".join(Globals.file_exts);
+    print "  Project root  :", Globals.project_root;
+    print "  Project name  :", Globals.project_name;
+    print "  Exclude Paths :", Globals.exclude_paths;
 
 def should_correct_guard_prompt():
-    r = raw_input("Correct the guard? [Y/n]:");
-    if(len(r) != 0 and r.lower() == "n"):
-        return False;
-    return True;
-def should_continue_run_prompt():
-    r = raw_input("Run the program? [y/N]:");
-    if(len(r) != 0 and r.lower() == "y"):
+    try:
+        r = raw_input("Correct the guard? [Y/n]:");
+        if(len(r) != 0 and r.lower() == "n"):
+            return False;
         return True;
-    return False;
+    except KeyboardInterrupt, e:
+        print ColorWarning("\nCanceling");
+        exit(0);
+
+def should_continue_run_prompt():
+    try:
+        r = raw_input("Run the program? [y/N]:");
+        if(len(r) != 0 and r.lower() == "y"):
+            return True;
+        return False;
+    except KeyboardInterrupt, e:
+        print ColorWarning("\nCanceling");
+        exit(0);
 
 def system_cmd(cmd):
     ret = os.system(cmd);
@@ -249,9 +258,9 @@ def system_cmd(cmd):
 
 def expand_path(path):
     return os.path.abspath(os.path.expanduser(path));
+
 def normalize_path(path):
     return os.path.normpath(expand_path(path));
-
 
 def print_fatal(msg):
     print ColorError("[FATAL]"), msg;
