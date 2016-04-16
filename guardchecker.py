@@ -43,19 +43,34 @@
 #COWTODO: Change the termcolor to cowtermcolor.
 
 ## Imports ##
-import os;
+import getopt;
 import os.path;
+import os;
 import re;
 import sys;
-import getopt;
 
-## Termcolor isn't a default package so do not
-## force the users have it.
+################################################################################
+## Don't let the standard import error to users - Instead show a              ##
+## 'nice' error screen describing the error and how to fix it.                ##
+################################################################################
+def __import_error_message_print(pkg_name, pkg_url):
+    print "Sorry, "
+    print "frame-merger depends on {} package.".format(pkg_name);
+    print "Visit {} to get it.".format(pkg_url);
+    print "Or checkout the README.md to learn other ways to install {}.".format(pkg_name);
+    exit(1);
+
+
+## cowtermcolor ##
 try:
-    from termcolor import colored;
-except Exception, e:
-    def colored(msg, color):
-        return msg;
+    import cowtermcolor;
+    from cowtermcolor import *;
+except ImportError, e:
+    __import_error_message_print(
+        "cowtermcolor",
+        "http//opensource.amazingcow.com/cowtermcolor.html");
+
+
 
 ################################################################################
 ## Globals                                                                    ##
@@ -113,18 +128,13 @@ class Constants:
 
 
 ################################################################################
-## Color Functions                                                            ##
+## Colors                                                                     ##
 ################################################################################
-def red_color(msg):
-    return colored(msg, "red");
-def green_color(msg):
-    return colored(msg, "green");
-def blue_color(msg):
-    return colored(msg, "blue");
-def magenta_color(msg):
-    return colored(msg, "magenta");
-def yellow_color(msg):
-    return colored(msg, "yellow");
+ColorError   = Color(RED);
+ColorWarning = Color(YELLOW);
+ColorOK      = Color(GREEN);
+ColorPath    = Color(MAGENTA);
+ColorInfoMsg = Color(BLUE);
 
 
 ################################################################################
@@ -132,24 +142,36 @@ def yellow_color(msg):
 ################################################################################
 def print_help():
     help = """Usage:
-  guardchecker [-hv] [-i] [-n <project_name>] [--dry-run]
-               [--ext <ext>] [--backup-dir <path>]
-               [-e <path>]  <project_root>
+  guardchecker [-h | -v]
+
+  guardchecker [-i | -f] [-D]
+               [-n <project-name>]
+               [-E <ext>]
+               [-e <path>]
+               [-b <path>]
+               <project-root>
 
 Options:
- *-h --help                 : Show this screen.
- *-v --version              : Show app version and copyright.
-  -i --interactive          : Runs in interactive mode (Asks before make a change).
-     --force                : Don't prompt anything... (Overriden by -i).
-  -n --project-name         : Set the Project Name (First part of include guard).
-     --ext        <ext>     : Add the file extension to search. (Must include the dot)
-     --backup-dir <path>    : Where the original files will be backup-ed.
-     --dry-run              : No modifications will actually be made.
+ *-h --help    : Show this screen.
+ *-v --version : Show app version and copyright.
+
+  -i --interactive : Runs in interactive mode (Asks before make a change).
+  -f --force       : Don't prompt anything... (Overriden by -i).
+
+  -n --project-name : Set the Project Name (First part of include guard).
+
+  -E --ext <ext> : Add the file extension to search  (Must include the dot).
+
+  -b --backup-dir   <path>  : Where the original files will be backup-ed.
   -e --exclude-path <path>  : The path (and all its children) is skipped.
 
+  -D --dry-run : No modifications will actually be made.
+
 Notes:
-  If <project_root> is blank the current dir is assumed.
-  If --project-name is not set the Project Name is assumed as the last part of <project_root>.
+  If <project-root> is blank the current dir is assumed.
+
+  If --project-name is not set the Project Name is assumed
+  as the last part of <project-root>.
 
   Multiple --ext <ext> can be used.
   Multiple --exclude-path <path> can be used.
@@ -168,19 +190,23 @@ def print_version():
     print;
     exit(0);
 
+
 def print_run_warning():
-    msg = """WARNING:
-    THIS IS A VERY, VERY DANGEROUS PROGRAM. IT WILL MESS WITH YOUR SOURCES.
-    THE PROGRAM WILL MAKE A BACKUP AT ({}) BUT IS STRONGLY ADVISED
-    THAT YOU CREATE A HANDMADE BACKUP BEFORE AND PASS ANOTHER CUSTOM BACKUP PATH.
-    CURRENTLY IT IS VERY DUMB TO SEEK THE INCLUDE GUARDS, SO IS VERY WISE
-    TO RUN IT IN A INTERACTIVE MODE ({}) TO CHECK THE CHANGES
-    BEFORE THEM HAPPEN.
-    RUN THIS AT YOUR OWN RISK, WORKS PRETTY WELL IF USED WITH CARE.
-    ENJOY..."""
-    warning = msg.format((Constants.DEFAULT_BACKUP_PATH),
-                         ("-i | --interactive"));
-    print red_color(warning);
+    msg = """{color}WARNING:
+  THIS IS A VERY, VERY DANGEROUS PROGRAM. IT WILL MESS WITH YOUR SOURCES.
+  THE PROGRAM WILL MAKE A BACKUP AT ({path}{color}) BUT IS STRONGLY ADVISED
+  THAT YOU CREATE A HANDMADE BACKUP BEFORE AND PASS ANOTHER CUSTOM BACKUP PATH.
+  CURRENTLY IT IS VERY DUMB TO SEEK THE INCLUDE GUARDS, SO IS VERY WISE
+  TO RUN IT IN A INTERACTIVE MODE ({flag}{color}) TO CHECK THE CHANGES
+  BEFORE THEM HAPPEN.
+  RUN THIS AT YOUR OWN RISK, WORKS PRETTY WELL IF USED WITH CARE.
+  ENJOY...{reset}"""
+
+    warning = msg.format(color=ColorWarning(auto_reset=False),
+                         path =ColorPath(Constants.DEFAULT_BACKUP_PATH),
+                         flag =ColorInfoMsg("-i | --interactive"),
+                         reset=ColorWarning(auto_reset=True));
+    print warning;
 
 def print_run_info():
     print "Run Options";
@@ -206,14 +232,17 @@ def should_continue_run_prompt():
 def system_cmd(cmd):
     ret = os.system(cmd);
     if(ret != 0):
-        print red_color("[ERROR]"), "cmd:", cmd;
-        exit(1);
+        print_fatal("cmd: {}".format(cmd));
 
 def expand_path(path):
     return os.path.abspath(os.path.expanduser(path));
 def normalize_path(path):
     return os.path.normpath(expand_path(path));
 
+
+def print_fatal(msg):
+    print ColorError("[FATAL]"), msg;
+    exit(1);
 
 ################################################################################
 ## Guard Related Functions                                                    ##
@@ -278,22 +307,22 @@ def check_file(root, filename):
 
         #Check if guards matches.
         if(correct_guard == current_guard):
-            print green_color("[OK]"), fullpath;
+            print ColorOK("[OK]"), fullpath;
             break;
 
         #Guards doesn't matches...
-        print yellow_color("[NOT MATCH]"), fullpath;
-        print "  Expected :", green_color(correct_guard);
-        print "  Found    :", red_color(current_guard);
+        print ColorWarning("[NOT MATCH]"), fullpath;
+        print "  Expected :", ColorOK(correct_guard);
+        print "  Found    :", ColorError(current_guard);
 
         if(Globals.opt_dry_run):
-            print magenta_color("[DRY RUN]");
+            print ColorInfoMsg("[DRY RUN]");
             return;
 
         #If running in non interactive mode, or user asks to correct the guard.
         if(not Globals.opt_interactive or should_correct_guard_prompt()):
             back_path = fix_guard(fullpath, current_guard, correct_guard);
-            print "  Backup   :", magenta_color(back_path);
+            print "  Backup   :", ColorPath(back_path);
 
 def scan():
     #Change the current working directory to the directory
@@ -303,7 +332,7 @@ def scan():
     ## Scan the directories.
     for root, dirs, files in os.walk(".", topdown=True):
         if(expand_path(root) in Globals.exclude_paths):
-            print blue_color("[SKIPPING]:"), magenta_color(root);
+            print ColorInfoMsg("[SKIPPING]:"), ColorPath(root);
             dirs [:] = [];
             files[:] = [];
             continue;
@@ -324,8 +353,7 @@ def main():
                                     Constants.ALL_FLAGS_SHORT,
                                     Constants.ALL_FLAGS_LONG);
     except Exception, e:
-        print red_color("[ERROR]"), e;
-        exit(1);
+        print_fatal(str(e));
 
     #Options switches.
     help_resquested   = False;
@@ -383,7 +411,7 @@ def main():
         print_run_warning();
         print_run_info();
         if(not should_continue_run_prompt()):
-            print yellow_color("Aborting...");
+            print ColorWarning("Aborting...");
             exit(0);
 
     #Expand all excluded paths.
