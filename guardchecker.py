@@ -54,7 +54,7 @@ import sys;
 ################################################################################
 def __import_error_message_print(pkg_name, pkg_url):
     print "Sorry, "
-    print "frame-merger depends on {} package.".format(pkg_name);
+    print "guardchecker depends on {} package.".format(pkg_name);
     print "Visit {} to get it.".format(pkg_url);
     print "Or checkout the README.md to learn other ways to install {}.".format(pkg_name);
     exit(1);
