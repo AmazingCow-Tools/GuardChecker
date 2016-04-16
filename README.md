@@ -1,99 +1,205 @@
-GuardChecker
-====
+# Guard Checker
 
-Made with <3 by [Amazing Cow](http://www.amazingcow.com).
+**Made with <3 by [Amazing Cow](http://www.amazingcow.com).**
 
-## Intro:
-**Check and correct the include guards in our C/C++ files.**
- 
-Basically our includes guards are formated in the way of:
-    
-```__PROJECTNAME_FOLDER1_FOLDER2_FOLDERN_FILENAME_FILEEXT__```   
 
-Where FOLDER1...FOLDERN are the dir structure that the file is placed.   
-So for example one include guard of the file:  
-```AwesomeProject/include/scenes/menu/somefile.h```  
+
+<!-- ####################################################################### -->
+<!-- ####################################################################### -->
+
+## Description:
+
+```guardchecker``` - Verify and enforce the consistency of C/C++ include guards.
+
+```guardchecker``` tries to correct includes guards that doesn't matches the 
+following convention:    
+
+* ```__PROJECTNAME_FOLDER1_FOLDER2_FOLDERN_FILENAME_FILEEXT__```  
+
+Where:
+
+* ```PROJECTNAME``` is the desired project name.
+* ```FOLDER1...FOLDERN``` is the subfolders of the file in the project tree.
+* ```FILENAME``` is the filename of the current file.
+* ```FILEEXT``` is the extension of the current file.
+
+
+So a header file in the following path:
+  
+* ```AwesomeProject/include/scenes/menu/somefile.h```  
 
 Should have the following include guard:
 
 ```cpp
-#ifndef __AwesomeProject_include_scenes_menu_somefile_h__
-#define __AwesomeProject_include_scenes_menu_somefile_h__
-...
-#endif 
+    #ifndef __AwesomeProject_include_scenes_menu_somefile_h__
+    #define __AwesomeProject_include_scenes_menu_somefile_h__
+
+    #endif 
 ```
 
-This program fix the guards that doesn't follow this convention.
+### DISCLAIMER 
 
-Since we made this to fit our needs, it's probably doesn't fits
-what you expects/needs, but you're **very welcomed** to **hack it** 
-to better fit your needs :)
+```guardchecker``` **could be a very dangerous program if not used with care.**   
+**It WILL MESS with your sources.**    
+**While it will make backups is strongly advised that you create a handmade**    
+**backup before and pass another custom backup path.**    
+
+**Use it with care and everything should be fine**    
+
+**Again... use the** ```--interactive``` **flag to see the changes before them**    
+**happen and/or use the** ```--dry-run``` **to check out if the** ```guardchecker```    
+**is doing what you want without doing anything for real.** 
+
+<br>
+
+As usual, you are **very welcomed** to **share** and **hack** it.
+
 
 
 <!-- ####################################################################### -->
-
-## Install:
-
-```$ sudo cp -f path/to/guardchecker.py /usr/local/bin/guardchecker```
-
-or use the makefile
-
-```$ make install ```
-
-
 <!-- ####################################################################### -->
 
 ## Usage:
 
-```
-guardchecker [-hv] [-i] [-n <project_name>] [--dry-run]
-             [--ext <ext>] [--backup-dir <path>]
-             [-e <path>]  <project_root>
+``` bash
+  guardchecker [-h | -v]
+
+  guardchecker [-i | -f] [-D]
+               [-n <project-name>]
+               [-E <ext>]
+               [-e <path>]
+               [-b <path>]
+               <project-root>
+
 Options:
- *-h --help                 : Show this screen.
- *-v --version              : Show app version and copyright.
-  -i --interactive          : Runs in interactive mode (Asks before make a change).
-     --force                : Don't prompt anything... (Overriden by -i).
-  -n --project-name         : Set the Project Name (First part of include guard).
-     --ext        <ext>     : Add the file extension to search. (Must include the dot)
-     --backup-dir <path>    : Where the original files will be backup-ed.
-     --dry-run              : No modifications will actually be made.
+ *-h --help    : Show this screen.
+ *-v --version : Show app version and copyright.
+
+  -i --interactive : Runs in interactive mode (Asks before make a change).
+  -f --force       : Don't prompt anything... (Overridden by -i).
+
+  -n --project-name : Set the Project Name (First part of include guard).
+
+  -E --ext <ext> : Add the file extension to search  (Must include the dot).
+
+  -b --backup-dir   <path>  : Where the original files will be backup-ed.
   -e --exclude-path <path>  : The path (and all its children) is skipped.
 
+  -D --dry-run : No modifications will actually be made.
+
+Notes:
+  If <project-root> is blank the current dir is assumed.
+
+  If --project-name is not set the Project Name is assumed
+  as the last part of <project-root>.
+
+  Multiple --ext <ext> can be used.
+  Multiple --exclude-path <path> can be used.
+
+  Options marked with * are exclusive, i.e. the guardchecker will run that
+  and exit successfully after the operation.
 ```
 
-##### Notes:
-If ```<project_root>``` is blank the current dir is assumed.  
-If ```--project-name``` is not set the Project Name is assumed as last part of ```<project_root>```   
-Multiple ```--ext <ext>``` can be used.
-Multiple ```--exclude-path <path>``` can be used.
 
-Options marked with * are exclusive, i.e. ```the guardchecker``` will run that
-and exit successfully after the operation.
+<!-- ####################################################################### -->
+<!-- ####################################################################### -->
 
-## Warning
-***THIS IS A VERY, VERY DANGEROUS PROGRAM. IT WILL MESS WITH YOUR SOURCES.  
-THE PROGRAM WILL MAKE A BACKUP AT (```/tmp/guardchecker```) BUT IS STRONGLY ADVISED  
-THAT YOU CREATE A HANDMADE BACKUP BEFORE AND PASS ANOTHER CUSTOM BACKUP PATH.  
-CURRENTLY IT IS VERY DUMB TO SEEK THE INCLUDE GUARDS, SO IS VERY WISE  
-TO RUN IT IN A INTERACTIVE MODE (```-i | --interactive```) TO CHECK THE CHANGES  
-BEFORE THEM HAPPEN.  
-RUN THIS AT YOUR OWN RISK, WORKS PRETTY WELL IF USED WITH CARE.  
-ENJOY...***
+## Install:
+
+Use the Mafefile.
+
+``` bash
+    make install
+```
+
+Or to uninstall
+
+``` bash
+    make uninstall
+```
 
 
+
+<!-- ####################################################################### -->
+<!-- ####################################################################### -->
+
+## Dependencies:
+
+This project uses / depends on:
+
+* Amazing Cow's 
+[cowtermcolor](http://www.github.com/AmazingCow/AmazingCore-Libs/cowtermcolor_py)
+package to coloring the terminal.
+
+
+
+<!-- ####################################################################### -->
+<!-- ####################################################################### -->
+
+## Environment and Files: 
+
+```guardchecker``` do not create / need any other files or environment vars.
+
+
+
+<!-- ####################################################################### -->
 <!-- ####################################################################### -->
 
 ## License:
+
 This software is released under GPLv3.
 
 
+
+<!-- ####################################################################### -->
 <!-- ####################################################################### -->
 
 ## TODO:
-Check the TODO file.
+
+Check the TODO file for general things.
+
+This projects uses the COWTODO tags.   
+So install [cowtodo](http://www.github.com/AmazingCow-Tools/COWTODO.html) and run:
+
+``` bash
+$ cd path/for/the/project
+$ cowtodo 
+```
+
+That's gonna give you all things to do :D.
 
 
+
+<!-- ####################################################################### -->
+<!-- ####################################################################### -->
+
+## BUGS:
+
+We strive to make all our code the most bug-free as possible - But we know 
+that few of them can pass without we notice ;).
+
+Please if you find any bug report to [bugs_opensource@amazingcow.com]() 
+with the name of this project and/or create an issue here in Github.
+
+
+
+<!-- ####################################################################### -->
+<!-- ####################################################################### -->
+
+## Source Files:
+
+* AUTHORS.txt
+* CHANGELOG.txt
+* COPYING.txt
+* guardchecker.py
+* Makefile
+* OLDREADME.md
+* README.md
+* TODO.txt
+
+
+
+<!-- ####################################################################### -->
 <!-- ####################################################################### -->
 
 ## Others:
