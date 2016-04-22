@@ -61,7 +61,7 @@ As usual, you are **very welcomed** to **share** and **hack** it.
 
 ## Usage:
 
-``` bash
+``` 
   guardchecker [-h | -v]
 
   guardchecker [-i | -f] [-D]
@@ -128,7 +128,7 @@ Or to uninstall
 This project uses / depends on:
 
 * Amazing Cow's 
-[cowtermcolor](http://www.github.com/AmazingCow/AmazingCore-Libs/cowtermcolor_py)
+[cowtermcolor](http://www.github.com/AmazingCow-Libs/cowtermcolor_py)
 package to coloring the terminal.
 
 
@@ -159,7 +159,7 @@ This software is released under GPLv3.
 Check the TODO file for general things.
 
 This projects uses the COWTODO tags.   
-So install [cowtodo](http://www.github.com/AmazingCow-Tools/COWTODO.html) and run:
+So install [cowtodo](http://www.github.com/AmazingCow-Tools/COWTODO) and run:
 
 ``` bash
 $ cd path/for/the/project
