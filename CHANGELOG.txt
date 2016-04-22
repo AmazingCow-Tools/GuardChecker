@@ -1,6 +1,19 @@
 ================================================================================
 | Version 0.3.x                                                                |
 ================================================================================
+version 0.3.1 - Apr 22, 2016
+-- General --
+    Fix errors on README.
+
+-- Source --
+    guardchecker.py
+    - Update version numbers.
+
+-- Info Files --
+    - Fix the syntax coloring on Usage.
+    - Fix wrong links.
+
+--------------------------------------------------------------------------------
 version 0.3.0 - Apr 16, 2016
 -- General --
     - Start using the cowtermcolor package for coloring. This enable us
