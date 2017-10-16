@@ -1,0 +1,10 @@
+Title:
+    GuardChecker
+Description:
+    Verify and enforce the consistency of C/C++ include guards.
+URL:
+    Github, http://github.com/AmazingCow-Tools/GuardChecker
+Owner:
+    AmazingCow Labs
+Section:
+    Tools
