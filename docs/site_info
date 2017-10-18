@@ -1,7 +1,8 @@
 Title:
     GuardChecker
 Description:
-    Verify and enforce the consistency of C/C++ include guards.
+    Verify and enforce the consistency of C/C++ include guards.<br>
+    <b>DEPRECATED</b>
 URL:
     Github, http://github.com/AmazingCow-Tools/GuardChecker
 Owner:

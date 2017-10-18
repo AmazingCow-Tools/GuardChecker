@@ -3,6 +3,12 @@
 **Made with <3 by [Amazing Cow](http://www.amazingcow.com).**
 
 
+## Guard Checker is DEPRECATED:
+We won't develop it furthermore since we're now using ```#pragma once``` instead
+of the hand written include guards.  
+
+The project continues to be free and available, but please notice that we 
+**WILL NOT** work on it anymore, so no bug fixes, no new features ;D
 
 <!-- ####################################################################### -->
 <!-- ####################################################################### -->
